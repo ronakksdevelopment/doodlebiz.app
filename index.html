@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DoodleBiz — One Scan. Your Whole Business.</title>
+<meta name="description" content="Create a QR-code linked digital business page in minutes.">
+<meta name="theme-color" content="#E01E26">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/forms.css">
+<link rel="stylesheet" href="css/doodles.css">
+</head>
+<body>
+
+<div id="loading-screen" class="loading-screen" role="status" aria-live="polite">
+  <svg class="loading-logo" viewBox="0 0 200 200" width="140" height="140" aria-hidden="true">
+    <circle cx="100" cy="100" r="86" fill="none" stroke="#111" stroke-width="6"/>
+    <path d="M60 110 Q70 70 100 70 Q130 70 140 110" fill="none" stroke="#E01E26" stroke-width="6" stroke-linecap="round"/>
+    <rect x="75" y="110" width="50" height="38" rx="6" fill="none" stroke="#111" stroke-width="6"/>
+    <circle cx="100" cy="129" r="6" fill="#E01E26"/>
+  </svg>
+  <h1 class="loading-title">DoodleBiz</h1>
+  <p class="loading-tagline">One Scan. Your Whole Business.</p>
+  <svg class="loading-stroke" viewBox="0 0 160 12" width="160" height="12" aria-hidden="true">
+    <path d="M4 6 Q40 -2 80 6 T156 6" fill="none" stroke="#E01E26" stroke-width="4" stroke-linecap="round" pathLength="100" />
+  </svg>
+  <p class="loading-version">Version 1.0</p>
+</div>
+
+<div id="app" class="app" hidden>
+
+  <header class="app-header">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" width="34" height="34" aria-hidden="true">
+        <circle cx="24" cy="24" r="20" fill="none" stroke="#111" stroke-width="4"/>
+        <path d="M14 26 Q16 16 24 16 Q32 16 34 26" fill="none" stroke="#E01E26" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">DoodleBiz</span>
+    </div>
+    <button id="offline-indicator" class="offline-pill" hidden><i class="fa-solid fa-wifi" aria-hidden="true"></i> Offline</button>
+  </header>
+
+  <nav class="side-nav" aria-label="Primary">
+    <button class="side-nav-btn active" data-view="links" aria-current="page">
+      <i class="fa-solid fa-link" aria-hidden="true"></i><span>My Links</span>
+    </button>
+    <button class="side-nav-btn" data-view="settings">
+      <i class="fa-solid fa-gear" aria-hidden="true"></i><span>Settings</span>
+    </button>
+    <button class="side-nav-add" id="desktop-add-btn" title="Create business page" aria-label="Create business page">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i><span>New Page</span>
+    </button>
+  </nav>
+
+  <main id="main-content" class="main-content">
+
+    <section id="view-links" class="view" aria-labelledby="links-heading">
+      <div class="view-header">
+        <h1 id="links-heading">My Links</h1>
+        <div class="search-wrap">
+          <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+          <input type="search" id="search-input" placeholder="Search your business pages" aria-label="Search your business pages">
+        </div>
+      </div>
+      <div id="links-list" class="links-list"></div>
+      <div id="links-empty" class="empty-state" hidden>
+        <svg viewBox="0 0 160 140" width="160" height="140" aria-hidden="true">
+          <rect x="30" y="40" width="100" height="80" rx="10" fill="none" stroke="#111" stroke-width="5"/>
+          <path d="M50 40 Q55 20 80 20 Q105 20 110 40" fill="none" stroke="#E01E26" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="80" cy="80" r="18" fill="none" stroke="#111" stroke-width="4"/>
+          <path d="M70 80h20M80 70v20" stroke="#E01E26" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <h2>No business pages yet</h2>
+        <p>Tap the red plus button to create your first QR-linked page.</p>
+      </div>
+    </section>
+
+    <section id="view-settings" class="view" hidden aria-labelledby="settings-heading">
+      <div class="view-header"><h1 id="settings-heading">Settings</h1></div>
+
+      <div class="settings-card">
+        <h2><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub Publishing</h2>
+        <p class="settings-help">Connect a repository so Generate QR can publish real pages to GitHub Pages. Your token is stored only in this browser.</p>
+        <form id="github-form" class="stacked-form">
+          <label for="gh-token">Personal access token
+            <div class="token-row">
+              <input type="password" id="gh-token" autocomplete="off" placeholder="github_pat_...">
+              <button type="button" id="gh-token-toggle" class="icon-btn" aria-label="Show token"><i class="fa-solid fa-eye" aria-hidden="true"></i></button>
+            </div>
+          </label>
+          <label for="gh-owner">Repository owner (user or org)
+            <input type="text" id="gh-owner" autocomplete="off" placeholder="yourusername">
+          </label>
+          <label for="gh-repo">Repository name
+            <input type="text" id="gh-repo" autocomplete="off" placeholder="my-doodlebiz-pages">
+          </label>
+          <label for="gh-branch">Branch
+            <input type="text" id="gh-branch" autocomplete="off" placeholder="main" value="main">
+          </label>
+          <label for="gh-baseurl">Public base URL (optional)
+            <input type="url" id="gh-baseurl" autocomplete="off" placeholder="https://yourusername.github.io/my-doodlebiz-pages">
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Connection</button>
+            <button type="button" id="gh-test-btn" class="btn btn-outline">Test Connection</button>
+            <button type="button" id="gh-delete-btn" class="btn btn-danger-text">Remove Token</button>
+          </div>
+          <p id="gh-status" class="field-status" role="status"></p>
+        </form>
+        <details class="info-details">
+          <summary>About token security</summary>
+          <p>This token is saved in your browser's local storage, which is not equivalent to secure server-side secret storage. Anyone with access to this browser/profile can read it. Use a fine-grained token restricted to this one repository with only the Contents permission, and revoke it from GitHub whenever you stop using this app.</p>
+        </details>
+      </div>
+
+      <div class="settings-card">
+        <h2><i class="fa-solid fa-database" aria-hidden="true"></i> Local Data</h2>
+        <div class="form-actions">
+          <button type="button" id="export-btn" class="btn btn-outline"><i class="fa-solid fa-file-export" aria-hidden="true"></i> Export Backup</button>
+          <label class="btn btn-outline file-label">
+            <i class="fa-solid fa-file-import" aria-hidden="true"></i> Import Backup
+            <input type="file" id="import-input" accept="application/json" hidden>
+          </label>
+          <button type="button" id="clear-all-btn" class="btn btn-danger-text">Clear All Local Data</button>
+        </div>
+        <p class="settings-help">Exports exclude your GitHub token by default. Data lives only in this browser and does not sync across devices.</p>
+      </div>
+
+      <div class="settings-card">
+        <h2><i class="fa-solid fa-circle-info" aria-hidden="true"></i> About</h2>
+        <p class="settings-help">DoodleBiz Version 1.0. Publishes the business details you enter to a public web page. Review your information carefully before publishing.</p>
+      </div>
+    </section>
+
+    <section id="view-form" class="view" hidden aria-labelledby="form-heading">
+      <div class="view-header">
+        <button type="button" id="form-close-btn" class="icon-btn" aria-label="Close form"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+        <h1 id="form-heading">New Business Page</h1>
+      </div>
+      <div id="form-root"></div>
+    </section>
+
+    <section id="view-generate" class="view" hidden aria-labelledby="gen-heading">
+      <div class="generate-screen">
+        <svg id="gen-illustration" class="gen-illustration" viewBox="0 0 180 160" width="180" height="160" aria-hidden="true">
+          <circle cx="90" cy="80" r="64" fill="none" stroke="#111" stroke-width="5" stroke-dasharray="6 10"/>
+          <path d="M60 90 Q70 60 90 60 Q110 60 120 90" fill="none" stroke="#E01E26" stroke-width="5" stroke-linecap="round"/>
+          <rect x="68" y="90" width="44" height="34" rx="6" fill="none" stroke="#111" stroke-width="5"/>
+        </svg>
+        <div id="gen-countdown" class="gen-countdown">60</div>
+        <h2 id="gen-heading">Updating your business page...</h2>
+        <p id="gen-status" class="gen-status">Preparing files</p>
+        <div id="gen-error" class="gen-error" hidden>
+          <p id="gen-error-msg"></p>
+          <div class="form-actions">
+            <button type="button" id="gen-retry-btn" class="btn btn-primary">Retry</button>
+            <button type="button" id="gen-edit-btn" class="btn btn-outline">Edit</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-result" class="view" hidden aria-labelledby="result-heading">
+      <div class="result-screen">
+        <h1 id="result-heading">Page Published</h1>
+        <div class="qr-frame"><canvas id="qr-canvas" width="280" height="280"></canvas></div>
+        <p id="result-url" class="result-url"></p>
+        <button type="button" id="copy-link-btn" class="btn btn-outline"><i class="fa-solid fa-copy" aria-hidden="true"></i> Copy Link</button>
+        <div class="result-actions-grid">
+          <button type="button" id="download-qr-btn" class="btn btn-primary"><i class="fa-solid fa-download" aria-hidden="true"></i> Download QR PNG</button>
+          <button type="button" id="open-page-btn" class="btn btn-outline"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Open Business Page</button>
+          <button type="button" id="result-edit-btn" class="btn btn-outline"><i class="fa-solid fa-pen" aria-hidden="true"></i> Edit Business</button>
+          <button type="button" id="result-done-btn" class="btn btn-text">Done</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav" aria-label="Primary">
+    <button class="bottom-nav-btn active" data-view="links" aria-current="page" aria-label="My Links" title="My Links">
+      <i class="fa-solid fa-link" aria-hidden="true"></i><span>My Links</span>
+    </button>
+    <button class="bottom-nav-add" id="mobile-add-btn" aria-label="Create business page" title="Create business page">
+      <i class="fa-solid fa-plus" aria-hidden="true"></i>
+    </button>
+    <button class="bottom-nav-btn" data-view="settings" aria-label="Settings" title="Settings">
+      <i class="fa-solid fa-gear" aria-hidden="true"></i><span>Settings</span>
+    </button>
+  </nav>
+
+</div>
+
+<div id="dialog-root" aria-live="polite"></div>
+<div id="toast-root" class="toast-root" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FtqF1qFo0zA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
